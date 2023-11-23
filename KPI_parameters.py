@@ -514,10 +514,10 @@ def close_task():
 ist = pytz.timezone('Asia/Kolkata')
 scheduler = BackgroundScheduler(timezone=ist)
 
-for hour in [7,15,23,18]:
-    scheduler.add_job(run_shiftwise, trigger='cron', hour=hour, minute=55, second=0)
-for hour in [0,8,16,18]:
-    scheduler.add_job(close_task, trigger='cron', hour=hour, minute=56, second=0)
+for hour in [7,15,23]:
+    scheduler.add_job(run_shiftwise, trigger='cron', hour=hour, minute=0, second=0)
+for hour in [0,8,16]:
+    scheduler.add_job(close_task, trigger='cron', hour=hour, minute=0, second=0)
 
 scheduler.start()
 try:
