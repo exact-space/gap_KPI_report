@@ -1,0 +1,204 @@
+<!doctype html>
+<!--Quite a few clients strip your Doctype out, and some even apply their own. Many clients do honor your doctype and it can make things much easier if you can validate constantly against a Doctype.-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse </title>
+
+<!-- Please use an inliner tool to convert all CSS to inline as inpage or external CSS is removed by email clients --> 
+<!-- important in CSS is used to prevent the styles of currently inline CSS from overriding the ones mentioned in media queries when corresponding screen sizes are encountered -->
+
+<style type="text/css">
+body {
+    margin: 0;
+}
+body, table, td, p, a, li, blockquote {
+    -webkit-text-size-adjust: none!important;
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+button {
+    width: 90%;
+}
+
+@media screen and (max-width:600px) {
+/*styling for objects with screen size less than 600px; */
+body, table, td, p, a, li, blockquote {
+    -webkit-text-size-adjust: none!important;
+    font-family: sans-serif;
+}
+table {
+    /* All tables are 100% width */
+    width: 100%;
+}
+.footer {
+    /* Footer has 2 columns each of 48% width */
+    height: auto !important;
+    max-width: 48% !important;
+    width: 48% !important;
+}
+table.responsiveImage {
+    /* Container for images in catalog */
+    height: auto !important;
+    max-width: 30% !important;
+    width: 30% !important;
+}
+table.responsiveContent {
+    /* Content that accompanies the content in the catalog */
+    height: auto !important;
+    max-width: 66% !important;
+    width: 66% !important;
+}
+.top {
+    /* Each Columnar table in the header */
+    height: auto !important;
+    max-width: 48% !important;
+    width: 48% !important;
+}
+.catalog {
+    margin-left: 0%!important;
+}
+}
+
+@media screen and (max-width:480px) {
+/*styling for objects with screen size less than 480px; */
+body, table, td, p, a, li, blockquote {
+    -webkit-text-size-adjust: none!important;
+    font-family: sans-serif;
+}
+table {
+    /* All tables are 100% width */
+    width: 100% !important;
+    border-style: none !important;
+}
+.footer {
+    /* Each footer column in this case should occupy 96% width  and 4% is allowed for email client padding*/
+    height: auto !important;
+    max-width: 96% !important;
+    width: 96% !important;
+}
+.table.responsiveImage {
+    /* Container for each image now specifying full width */
+    height: auto !important;
+    max-width: 96% !important;
+    width: 96% !important;
+}
+.table.responsiveContent {
+    /* Content in catalog  occupying full width of cell */
+    height: auto !important;
+    max-width: 96% !important;
+    width: 96% !important;
+}
+.top {
+    /* Header columns occupying full width */
+    height: auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+.catalog {
+    margin-left: 0%!important;
+}
+button {
+    width: 90%!important;
+}
+}
+</style>
+</head>
+<body yahoo="yahoo" background="#f7f7f7" style="background: #f7f7f7;">
+<table width="100%"  cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <td><table width="650"  align="center" cellpadding="0" cellspacing="0" background="#fff" style="background:#fff">
+          <!-- Main Wrapper Table with initial width set to 60opx -->
+          <tbody>
+            <tr>
+              <td bgcolor="#f7f7f7"><table  class="top" width="48%"  align="center" cellpadding="0" cellspacing="0" style="padding:40px 10px 10px 10px;" >
+                  <!-- First header column with Logo -->
+                  <tbody>
+                    <tr>
+                      <td style="font-size: 12px; color:#929292; text-align:center; font-family: sans-serif; padding-bottom:15px;"><img src="#" width="150"/></td>
+                    </tr>
+                  </tbody>
+                </table></td>
+              </tr>
+
+            <tr> 
+              <!-- Introduction area -->
+              <td><table class="table" width="96%" align="center" style="text-align: center; padding-top: 15px;">
+                  <tbody>
+                    <tr>
+                      <td colspan="3" align="left" style="border-bottom: solid 1px #CACACA; padding-bottom: 5px; font-size: 15px;"><b>Asset Details</b></td>
+                    </tr>
+                    <tr style="font-size: 13px; color: #9C9C9C">
+                      <td align="left" width="33.3%" style="padding-top: 10px;">Unit</td>
+                      <td align="left" width="33.3%" style="padding-top: 10px;">Site</td>
+                      <td align="left" width="33.3%" style="padding-top: 10px;">Customer</td>
+                    </tr>
+                    <tr>
+                      <td align="left" width="33.3%">UnitName</td>
+                      <td align="left" width="33.3%">SiteName</td>
+                      <td align="left"  width="33.3%">CustomerName</td>
+                    </tr>
+                  </tbody>
+                </table>
+				  <table class="table" width="96%" align="center" style="text-align: center; padding-top: 20px;">
+				  <tr>
+                      <td colspan="3" align="left" style="border-bottom: solid 1px #CACACA; color:red; padding-bottom: 5px; font-size: 15px;"><b>KPI Parameters Report</b></td>
+                    </tr>  
+				  </table>
+				  
+				    
+        <table class="table" cellspacing="0" cellpadding="3" width="96%" align="center" style="text-align: center; padding-top: 10px;" border="0">
+          <thead class="thead-dark" style="border-bottom: solid 1px #CACACA;">
+            <tr>
+					  <th scope="col" width="40" align="left" style="font-size: 13px; color: #000; border-bottom: solid 2px #CACACA; ">SN</th>
+            <th scope="col" align="left"  style="font-size: 13px; color: #000; border-bottom: solid 2px #CACACA;">Description</th>
+					  <!-- <th scope="col" align="left"  style="font-size: 13px; color: #000; border-bottom: solid 2px #CACACA;">Observed</th>
+					  <th scope="col" align="left"  style="font-size: 13px; color: #000; border-bottom: solid 2px #CACACA;">Expected</th>
+            <th scope="col" width="100" align="left"  style="font-size: 13px; color: #000; border-bottom: solid 2px #CACACA;">Alarm</th> -->
+            </tr>
+            </thead>
+            <tbody id="devList">
+                   
+            </tbody>
+        </table></td>
+            </tr>
+			
+      <tr> 
+              <!-- HTML Spacer row -->
+              <td style="padding:30px 0px 10px 0px; border-top:solid 1px #CACACA;"><table width="100%" align="left"  cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td align="center">
+						<div style="width:150px; font-size:20px; background:red; color: #fff; padding:10px;">
+						  <a style="color: #fff; text-decoration:none;" href="#" id = 'task_link'>More Details</a>
+						</div>
+					</td>
+                  </tr>
+                </table></td>
+            </tr>
+            <tr> 
+              <!-- HTML Spacer row -->
+              <td ><table width="96%" align="left"  cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="font-size: 0; line-height: 0;" height="20">&nbsp;</td>
+                  </tr>
+                </table></td>
+            </tr>
+            <tr> 
+              <!-- HTML spacer row -->
+              <td  background="#f7f7f7" style="background:#f7f7f7; padding: 5px 0px; font-size: 11px"><table width="96%" align="left"  cellpadding="0" cellspacing="0" >
+                  <tr>
+                    <td >
+						<i>Please NOTE: This is a system generated e-mail, DO NOT REPLY</i></td>
+                  </tr>
+                </table></td>
+            </tr>
+          </tbody>
+        </table></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
