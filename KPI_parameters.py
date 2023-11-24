@@ -150,11 +150,11 @@ def run_shiftwise():
             #print(current_hour)
             # Define the shift based on the current hour
             if 23 <= current_hour or current_hour < 7:
-                shift_name = 'Shift_A data'
+                shift_name = 'Shift A data'
             elif 7 <= current_hour < 15:
-                shift_name = 'Shift_B data'
+                shift_name = 'Shift B data'
             elif 15 <= current_hour < 23:
-                shift_name = 'Shift_C data'
+                shift_name = 'Shift C data'
 
             # Modify the column names accordingly
             result_table = result_table.T
@@ -173,24 +173,24 @@ def run_shiftwise():
 
             Geometric_density = {
                 'KPI':['Green Anode Density'],
-                'Mould1_density_Median': [Mould1_Geometric_median],
-                'Mould2_density_Median': [Mould2_Geometric_median],
-                'Mould1_density_stdv': [Mould1_Geometric_stdv],
-                'Mould2_density_stdv': [Mould2_Geometric_stdv]
+                'Mould1 GA density Median': [Mould1_Geometric_median],
+                'Mould2 GA density Median': [Mould2_Geometric_median],
+                'Mould1 GA density stdv': [Mould1_Geometric_stdv],
+                'Mould2 GA density stdv': [Mould2_Geometric_stdv]
             }
 
             weight_stdv = {
                 'KPI':['Anode Weight Stdv'],
-                'Mould1_weight_stdv': [Mould1_anode_weight_stdv],
-                'Mould2_weight_stdv': [Mould2_anode_weight_stdv]
+                'Mould1 GA weight stdv': [Mould1_anode_weight_stdv],
+                'Mould2 GA weight stdv': [Mould2_anode_weight_stdv]
             }
 
             Dry_density = {
                 'KPI':['Dry density'],
-                'Mould1_dry_density_Median': [Mould1_Dry_median],
-                'Mould2_dry_density_Median': [Mould2_Dry_median],
-                'Mould1_dry_density_stdv': [Mould1_Dry_stdv],
-                'Mould2_dry_density_stdv': [Mould2_Dry_stdv]
+                'Mould1 dry density Median': [Mould1_Dry_median],
+                'Mould2 dry density Median': [Mould2_Dry_median],
+                'Mould1 dry density stdv': [Mould1_Dry_stdv],
+                'Mould2 dry density stdv': [Mould2_Dry_stdv]
             }
 
             # Check conditions and return non-empty data frames
@@ -202,12 +202,15 @@ def run_shiftwise():
             display_frames = [result_table]
             if not result_geometric.empty:
                 result_geometric.set_index('KPI', inplace=True)
+                result_geometric = result_geometric.round(3)
                 display_frames.append(result_geometric)
             if not result_dry.empty:
                 result_dry.set_index('KPI', inplace=True)
+                result_dry = result_dry.round(3)
                 display_frames.append(result_dry)
             if not result_weight.empty:
                 result_weight.set_index('KPI', inplace=True)
+                result_weight = result_weight.round(3)
                 display_frames.append(result_weight)
 
         # Convert all values in each DataFrame to strings
@@ -234,11 +237,11 @@ def run_shiftwise():
             current_hour = now.hour
 
             if 23 <= current_hour or current_hour < 7:
-                shift_name = 'Shift_A data'
+                shift_name = 'Shift A data'
             elif 7 <= current_hour < 15:
-                shift_name = 'Shift_B data'
+                shift_name = 'Shift B data'
             elif 15 <= current_hour < 23:
-                shift_name = 'Shift_C data'
+                shift_name = 'Shift C data'
 
             fig, ax = plt.subplots(figsize=(15, 9))
             bar_width = 0.35
@@ -254,13 +257,13 @@ def run_shiftwise():
                             xytext=(0, 3),
                             textcoords="offset points",
                             ha='center', va='bottom')
-
+            ax.legend(handles=[plt.Line2D([0], [0], color='salmon', label='Target Not Achieved'),plt.Line2D([0], [0], color='lightgreen', label='Targets'),plt.Line2D([0], [0], color='green', label=shift_name)])
             ax.set_xlabel('KPIs')
             ax.set_ylabel('Values')
             ax.set_title( shift_name + ' vs Targets')
             ax.set_xticks(index)
             ax.set_xticklabels(df['KPIs'], rotation=45, ha='right')
-            ax.legend()
+            #ax.legend()
 
             # Get the next available image name
             next_image_name = get_next_image_name('kpi_target_img')  # Replace 'path_to_your_directory' with the actual path
@@ -331,7 +334,7 @@ def run_shiftwise():
                     "632d3bd36d161904360db797", #intern
                     '5c591d697dc9e324ee08a456', 
                     '61431baf1c46e3435ff50ac7', #sayan
-                    '5f491bb942ba5c3f7a474d15', #anisha
+                    '5f491bb942ba5c3f7a474d15', 
                 ],
                 "status": "inprogress",
                 "content": [
@@ -368,11 +371,11 @@ def run_shiftwise():
             #print(current_hour)
             global shift_value
             if 23 <= current_hour or current_hour < 7:
-                shift_value = 'Testing Shift_A KPI report'
+                shift_value = 'Shift A KPI report'
             elif 7 <= current_hour < 15:
-                shift_value = 'Testing Shift_B KPI report'
+                shift_value = 'Shift B KPI report'
             elif 15 <= current_hour < 23:
-                shift_value = 'Testing Shift_C KPI report'
+                shift_value = 'Shift C KPI report'
             json_body["content"][0]["value"] = shift_value
             for dataframe in dataframes:
                 new_table_data = [dataframe.columns.tolist()] + dataframe.values.tolist()
