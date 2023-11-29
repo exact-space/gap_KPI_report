@@ -30,7 +30,7 @@ def run_shiftwise():
     taglist2 = ['GAP_GAP03.PLC03.ACTUAL_FORMULA.FKTP','GAP_GAP04.PLC04.U363_K145_FIT_01_PV']
     checklist = ['GAP_GAP03.PLC03.SCHENCK2_FEED_RATE','GAP_GAP04.PLC04.MLD1_DATA_Anode_Number','GAP_GAP04.PLC04.MLD2_DATA_Anode_Number']
     def getValues(tagList):
-        url = "https://exactspace.co/kairosapi/api/v1/datapoints/query"
+        url = "https://data.exactspace.co/kairosapi/api/v1/datapoints/query"
         d = {
             "metrics": [
                 {
@@ -104,45 +104,72 @@ def run_shiftwise():
             data1.columns = ['Time', 'Mould2_anode_number', 'Mould2_Geometric_density', 'Mould2_Dry_density','Mould2_Anode_weight']
             data2.columns = ['Time', 'Total Paste', 'Paste Rejection']
 
+            data2.loc[data2['Paste Rejection'] < 0.2, 'Paste Rejection'] = 0
+            data = data[data['Mould1_Anode_weight']>500]
+            data1 = data1[data1['Mould2_Anode_weight'] > 500]
+            
             data.reset_index(drop=True, inplace=True)
             data2.reset_index(drop=True, inplace=True)
             data1.reset_index(drop=True, inplace=True)
 
             data2['Total Paste'] = data2['Total Paste'] / 60
             data2['Paste Rejection'] = data2['Paste Rejection'] / 60
+            
+            Total_rejected_paste = data2['Paste Rejection'].sum()
+            Total_rejected_paste = Total_rejected_paste.round(2)
+            #print(Total_rejected_paste)
 
+            Total_rejected_paste = str(Total_rejected_paste) + 'tons'
+            #print(Total_rejected_paste)
             paste_rejection_percentage = (data2['Paste Rejection'].sum() / data2['Total Paste'].sum()) * 100
+            paste_rejection_percentage = paste_rejection_percentage.round(3)
 
-            Mould1_anode_weight_median = data['Mould1_Anode_weight'].median()
-            Mould2_anode_weight_median = data1['Mould2_Anode_weight'].median()
+            Mould1_anode_weight_mean = data['Mould1_Anode_weight'].mean()
+            Mould2_anode_weight_mean = data1['Mould2_Anode_weight'].mean()
             Mould1_anode_weight_stdv = data['Mould1_Anode_weight'].std()
             Mould2_anode_weight_stdv = data1['Mould2_Anode_weight'].std()
-            Mould1_Geometric_median = data['Mould1_Geometric_density'].median()
-            Mould2_Geometric_median = data1['Mould2_Geometric_density'].median()
+            Mould1_Geometric_mean = data['Mould1_Geometric_density'].mean()
+            Mould2_Geometric_mean = data1['Mould2_Geometric_density'].mean()
             Mould1_Geometric_stdv = data['Mould1_Geometric_density'].std()
             Mould2_Geometric_stdv = data1['Mould2_Geometric_density'].std()
-            Mould1_Dry_median = data['Mould1_Dry_density'].median()
-            Mould2_Dry_median = data1['Mould2_Dry_density'].median()
+            Mould1_Dry_mean = data['Mould1_Dry_density'].mean()
+            Mould2_Dry_mean = data1['Mould2_Dry_density'].mean()
             Mould1_Dry_stdv = data['Mould1_Dry_density'].std()
             Mould2_Dry_stdv = data1['Mould2_Dry_density'].std()
 
-            combined_median_Geometric = pd.concat([data['Mould1_Geometric_density'], data1['Mould2_Geometric_density']]).median()
-            combined_std_dev_Geometric = pd.concat([data['Mould1_Geometric_density'], data1['Mould2_Geometric_density']]).std()
-            combined_std_dev_Dry = pd.concat([data['Mould1_Dry_density'], data1['Mould2_Dry_density']]).std()
-            combined_median_dry = pd.concat([data['Mould1_Dry_density'], data1['Mould2_Dry_density']]).median()
-            combined_std_dev_weight = pd.concat([data['Mould1_Anode_weight'], data1['Mould2_Anode_weight']]).std()
+            combined_mean_Geometric = pd.concat([data['Mould1_Geometric_density'], data1['Mould2_Geometric_density']]).mean().round(3)
+            combined_std_dev_Geometric = pd.concat([data['Mould1_Geometric_density'], data1['Mould2_Geometric_density']]).std().round(3)
+            combined_std_dev_Dry = pd.concat([data['Mould1_Dry_density'], data1['Mould2_Dry_density']]).std().round(3)
+            combined_mean_dry = pd.concat([data['Mould1_Dry_density'], data1['Mould2_Dry_density']]).mean().round(3)
+            combined_std_dev_weight = pd.concat([data['Mould1_Anode_weight'], data1['Mould2_Anode_weight']]).std().round(3)
+            
+        #     combined_mean_Geometric = combined_mean_Geometric.round(3)
+        #     combined_mean_dry = combined_mean_dry.round(3)
+        #     combined_std_dev_Geometric = combined_std_dev_Geometric.round(3)
+        #     combined_std_dev_Dry = combined_std_dev_Dry.round(3)
+        #     combined_std_dev_weight = combined_std_dev_weight.round(3)
+
+
 
             # Create a dictionary with the calculated variables
-            table_data = {
-                'Green Anode Density (g/cm^3)': [combined_median_Geometric],
-                'Green Anode Dry Density(g/cm^3)': [combined_median_dry],
+            table_data1 = {
+                'Green Anode Density (g/cm^3)': [combined_mean_Geometric],
+                'Green Anode Dry Density(g/cm^3)': [combined_mean_dry],
                 'GA Density Stdv': [combined_std_dev_Geometric],
                 'GA weight Stdv': [combined_std_dev_weight],
                 'Green Paste Rejection (%)': [paste_rejection_percentage]
             }
+            table_data = {
+                'Green Anode Density (g/cm^3)': [combined_mean_Geometric],
+                'Green Anode Dry Density(g/cm^3)': [combined_mean_dry],
+                'GA Density Stdv': [combined_std_dev_Geometric],
+                'GA weight Stdv': [combined_std_dev_weight],
+                'Green Paste Rejection (%)': [f' {paste_rejection_percentage}({Total_rejected_paste})']
+            }
 
             # Create a DataFrame from the dictionary
             result_table = pd.DataFrame(table_data)
+            result_table1 =pd.DataFrame(table_data1)
             ist = timezone('Asia/Kolkata')
             now = datetime.datetime.now(ist)
 
@@ -150,21 +177,34 @@ def run_shiftwise():
             #print(current_hour)
             # Define the shift based on the current hour
             if 23 <= current_hour or current_hour < 7:
-                shift_name = 'Shift A data'
-            elif 7 <= current_hour < 15:
                 shift_name = 'Shift B data'
-            elif 15 <= current_hour < 23:
+            elif 7 <= current_hour < 15:
                 shift_name = 'Shift C data'
+            elif 15 <= current_hour < 23:
+                shift_name = 'Shift A data'
 
             # Modify the column names accordingly
             result_table = result_table.T
+            result_table1 = result_table1.T 
+            
             result_table['Targets'] = [1.650, 1.4270, 0.006, 4, 2.2]
+            result_table1['Targets'] = [1.650, 1.4270, 0.006, 4, 2.2]
+
             result_table = result_table.rename(columns={0: shift_name})
+            result_table1 = result_table1.rename(columns={0: shift_name})
+
             result_table.reset_index(inplace=True)
+            result_table1.reset_index(inplace =True)
             result_table.columns = ['KPIs',shift_name,"Targets"]
+            result_table1.columns = ['KPIs',shift_name,"Targets"]
+                                
             result_table = result_table[['KPIs', 'Targets', shift_name]]
+            result_table1 = result_table1[['KPIs', 'Targets', shift_name]]
             result_table = result_table.round(3)
-            df = result_table.copy()
+            result_table1 = result_table1.round(3)
+            df = result_table1.copy()
+            result_table = result_table
+            #print(result_table)
             # Determine colors based on whether the target is met
             conditions = ['>=', '>=', '<=', '<=', '<=']
             df['Color'] = ['green' if ((cond == '>=' and current >= target) or
@@ -173,32 +213,31 @@ def run_shiftwise():
 
             Geometric_density = {
                 'KPI':['Green Anode Density'],
-                'Mould1 GA density Median': [Mould1_Geometric_median],
-                'Mould2 GA density Median': [Mould2_Geometric_median],
-                'Mould1 GA density stdv': [Mould1_Geometric_stdv],
-                'Mould2 GA density stdv': [Mould2_Geometric_stdv]
+                'Mould1 Geometric density mean': [Mould1_Geometric_mean],
+                'Mould2 Geometric density mean': [Mould2_Geometric_mean],
+                'Mould1 Geometric density stdv': [Mould1_Geometric_stdv],
+                'Mould2 Geometric density stdv': [Mould2_Geometric_stdv]
             }
 
             weight_stdv = {
                 'KPI':['Anode Weight Stdv'],
-                'Mould1 GA weight stdv': [Mould1_anode_weight_stdv],
-                'Mould2 GA weight stdv': [Mould2_anode_weight_stdv]
+                'Mould1 weight stdv': [Mould1_anode_weight_stdv],
+                'Mould2 weight stdv': [Mould2_anode_weight_stdv]
             }
 
             Dry_density = {
                 'KPI':['Dry density'],
-                'Mould1 dry density Median': [Mould1_Dry_median],
-                'Mould2 dry density Median': [Mould2_Dry_median],
+                'Mould1 dry density mean': [Mould1_Dry_mean],
+                'Mould2 dry density mean': [Mould2_Dry_mean],
                 'Mould1 dry density stdv': [Mould1_Dry_stdv],
                 'Mould2 dry density stdv': [Mould2_Dry_stdv]
             }
 
             # Check conditions and return non-empty data frames
-            result_geometric = pd.DataFrame(Geometric_density) if combined_median_Geometric < 1.650 or combined_std_dev_Geometric > 0.006 else pd.DataFrame()
-            result_dry = pd.DataFrame(Dry_density) if combined_median_dry < 1.427 else pd.DataFrame()
+            result_geometric = pd.DataFrame(Geometric_density) if combined_mean_Geometric < 1.650 or combined_std_dev_Geometric > 0.006 else pd.DataFrame()
+            result_dry = pd.DataFrame(Dry_density) if combined_mean_dry < 1.427 else pd.DataFrame()
             result_weight = pd.DataFrame(weight_stdv) if combined_std_dev_weight > 4 else pd.DataFrame()
-
-            # Create a list of data frames to display
+            
             display_frames = [result_table]
             if not result_geometric.empty:
                 result_geometric.set_index('KPI', inplace=True)
@@ -213,7 +252,7 @@ def run_shiftwise():
                 result_weight = result_weight.round(3)
                 display_frames.append(result_weight)
 
-        # Convert all values in each DataFrame to strings
+            # Convert all values in each DataFrame to strings
             display_frames = convert_values_to_string(display_frames)
             return display_frames,df
         # df = df.round(3, inplace=True)
@@ -237,11 +276,11 @@ def run_shiftwise():
             current_hour = now.hour
 
             if 23 <= current_hour or current_hour < 7:
-                shift_name = 'Shift A data'
-            elif 7 <= current_hour < 15:
                 shift_name = 'Shift B data'
-            elif 15 <= current_hour < 23:
+            elif 7 <= current_hour < 15:
                 shift_name = 'Shift C data'
+            elif 15 <= current_hour < 23:
+                shift_name = 'Shift A data'
 
             fig, ax = plt.subplots(figsize=(15, 9))
             bar_width = 0.35
@@ -371,11 +410,11 @@ def run_shiftwise():
             #print(current_hour)
             global shift_value
             if 23 <= current_hour or current_hour < 7:
-                shift_value = 'Shift A KPI report'
-            elif 7 <= current_hour < 15:
                 shift_value = 'Shift B KPI report'
-            elif 15 <= current_hour < 23:
+            elif 7 <= current_hour < 15:
                 shift_value = 'Shift C KPI report'
+            elif 15 <= current_hour < 23:
+                shift_value = 'Shift A KPI report'
             json_body["content"][0]["value"] = shift_value
             for dataframe in dataframes:
                 new_table_data = [dataframe.columns.tolist()] + dataframe.values.tolist()
