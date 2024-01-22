@@ -461,7 +461,7 @@ def run_shiftwise():
         print("this is uploaded image link:", image_link)
         ist = timezone('Asia/Kolkata')
         now = datetime.datetime.now(ist)
-        formatted_date_alert_time = now.hour
+        report_creation_time = now.hour
         json_body = {
             "type": "task",
                 "voteAcceptCount": 0,
@@ -482,7 +482,7 @@ def run_shiftwise():
                 "updateHistory":[{
                     "action":"This task is created by Pulse.",
                      "by": "",
-                     "on": formatted_date_alert_time
+                     "on": report_creation_time
                 }],
                 "unitsId": "60ae9143e284d016d3559dfb",
                 "collaborators": [
