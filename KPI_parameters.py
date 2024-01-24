@@ -9,6 +9,7 @@ from pytz import timezone
 import platform
 import pytz
 from datetime import timedelta
+from datetime import datetime
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 import platform
@@ -459,9 +460,8 @@ def run_shiftwise():
             return status
         image_link = uploadRefernceData(image_path)
         print("this is uploaded image link:", image_link)
-        ist = timezone('Asia/Kolkata')
-        now = datetime.datetime.now(ist)
-        report_creation_time = now.hour
+        current_date_time = datetime.datetime.now() + pd.Timedelta(hours=5.5)
+        task_creation_time = current_date_time.strftime("%Y-%m-%d %H:%M:%S")
         json_body = {
             "type": "task",
                 "voteAcceptCount": 0,
@@ -482,7 +482,7 @@ def run_shiftwise():
                 "updateHistory":[{
                     "action":"This task is created by Pulse.",
                      "by": "",
-                     "on": report_creation_time
+                     "on": task_creation_time
                 }],
                 "unitsId": "60ae9143e284d016d3559dfb",
                 "collaborators": [
